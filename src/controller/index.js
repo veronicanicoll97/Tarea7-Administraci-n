@@ -1,0 +1,1 @@
+exports.ClienteController = require('./ClienteController');

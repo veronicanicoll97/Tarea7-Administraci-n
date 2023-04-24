@@ -1,0 +1,1 @@
+exports.ClienteRepository = require('./ClienteRepository');

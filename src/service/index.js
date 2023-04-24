@@ -1,0 +1,1 @@
+exports.ClienteService = require('./ClienteService');

@@ -1,0 +1,1 @@
+exports.RespuestaModelo = require('./RespuestaModelo');

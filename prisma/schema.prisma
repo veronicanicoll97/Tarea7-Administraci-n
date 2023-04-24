@@ -1,0 +1,52 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model clientes {
+  idCliente    Int        @id(map: "clientes_pk") @default(autoincrement()) @map("id_cliente")
+  nroDocumento String     @map("cedula") @db.VarChar
+  nombres      String     @db.VarChar
+  apellidos    String     @db.VarChar
+  reservas     reservas[]
+}
+
+model mesas {
+  idMesa           Int          @id(map: "mesas_pk") @default(autoincrement()) @map("id_mesa")
+  nombreMesa       String       @map("nombre_mesa") @db.VarChar
+  posicionX        Float        @map("posicion_x") @db.Real
+  posicionY        Int          @map("posicion_y")
+  capacidadPorMesa Int          @map("capacidad_x_mesa")
+  estado           estado_mesa? @default(DISPONIBLE)
+  reservas         reservas[]
+}
+
+model reservas {
+  idReserva         Int          @id(map: "reservas_pk") @default(autoincrement()) @map("id_reserva")
+  fechaReserva      DateTime     @map("fecha_reserva") @db.Date
+  horaInicioReserva DateTime     @map("hora_inicio_reserva") @db.Time(6)
+  horaFinReserva    DateTime     @map("hora_fin_reserva") @db.Time(6)
+  cantidadMesa      Int          @map("cantidad_mesa")
+  idRestaurante     Int          @map("id_restaurante")
+  idCliente         Int          @map("id_cliente")
+  idMesa            Int          @map("id_mesa")
+  clientes          clientes     @relation(fields: [idCliente], references: [idCliente], onDelete: NoAction, onUpdate: NoAction, map: "clientes_reservas_fk")
+  mesas             mesas        @relation(fields: [idMesa], references: [idMesa], onDelete: NoAction, onUpdate: NoAction, map: "mesas_reservas_fk")
+  restaurantes      restaurantes @relation(fields: [idRestaurante], references: [idRestaurante], onDelete: NoAction, onUpdate: NoAction, map: "restaurantes_reservas_fk")
+}
+
+model restaurantes {
+  idRestaurante Int        @id(map: "restaurantes_pk") @default(autoincrement()) @map("id_restaurante")
+  nombre        String     @db.VarChar
+  direccion     String     @db.VarChar
+  reservas      reservas[]
+}
+
+enum estado_mesa {
+  DISPONIBLE
+  RESERVADO
+}

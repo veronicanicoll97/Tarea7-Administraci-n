@@ -1,0 +1,1 @@
+exports.respuesta = require('./respuestaPeticion');
