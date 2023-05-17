@@ -10,7 +10,7 @@ datasource db {
 }
 
 model clientes {
-  id_cliente Int        @id(map: "clientes_pk") @default(autoincrement())
+  idCliente Int        @id(map: "clientes_pk") @default(autoincrement()) @map("id_cliente")
   cedula     String     @unique(map: "cedula_uk") @db.VarChar
   nombres    String     @db.VarChar
   apellidos  String     @db.VarChar
@@ -40,18 +40,18 @@ model reservas {
   id_restaurante      Int
   id_cliente          Int
   id_mesa             Int
-  clientes            clientes     @relation(fields: [id_cliente], references: [id_cliente], onDelete: NoAction, onUpdate: NoAction, map: "clientes_reservas_fk")
+  clientes            clientes     @relation(fields: [id_cliente], references: [idCliente], onDelete: NoAction, onUpdate: NoAction, map: "clientes_reservas_fk")
   mesas               mesas        @relation(fields: [id_mesa], references: [id_mesa], onDelete: NoAction, onUpdate: NoAction, map: "mesas_reservas_fk")
-  restaurantes        restaurantes @relation(fields: [id_restaurante], references: [id_restaurante], onDelete: NoAction, onUpdate: NoAction, map: "restaurantes_reservas_fk")
+  restaurantes        restaurantes @relation(fields: [id_restaurante], references: [idRestaurante], onDelete: NoAction, onUpdate: NoAction, map: "restaurantes_reservas_fk")
 
   @@schema("restaurante")
 }
 
 model restaurantes {
-  id_restaurante Int        @id(map: "restaurantes_pk") @default(autoincrement())
-  nombre         String     @db.VarChar
-  direccion      String     @db.VarChar
-  reservas       reservas[]
+  idRestaurante Int        @id(map: "restaurantes_pk") @default(autoincrement()) @map("id_restaurante")
+  nombre        String     @db.VarChar
+  direccion     String     @db.VarChar
+  reservas      reservas[]
 
   @@schema("restaurante")
 }

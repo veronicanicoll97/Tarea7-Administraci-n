@@ -10,7 +10,9 @@ class ClienteController {
     async getListadoClientes(req, res) {
         let respuesta;
         try {
-            const listado = await this.#clienteService.listadoDeClientes(req.logger);
+            const listado = await this.#clienteService.listadoDeClientes(
+                req.logger
+            );
             respuesta = new RespuestaModelo(
                 'EXITO',
                 'Listado de clientes.',
@@ -32,17 +34,18 @@ class ClienteController {
     async getCliente(req, res) {
         let respuesta;
         try {
-
             const { idCliente, nroDocumento } = req.body;
             let params;
-            if(!idCliente) {
-                params = { nroDocumento }
-            }
-            else {
-                params = { idCliente }
+            if (!idCliente) {
+                params = { nroDocumento };
+            } else {
+                params = { idCliente };
             }
 
-            const cliente = await this.#clienteService.clienteById(req.logger, params);
+            const cliente = await this.#clienteService.clienteById(
+                req.logger,
+                params
+            );
             respuesta = new RespuestaModelo(
                 'EXITO',
                 'Cliente encontrado.',
@@ -51,7 +54,7 @@ class ClienteController {
 
             return res.json(respuesta);
         } catch (error) {
-            req.logger.error(JSON.stringify(error))
+            req.logger.error(JSON.stringify(error));
             respuesta = new RespuestaModelo(
                 'NO_EXITO',
                 'Error al obtener el cliente.',
@@ -59,14 +62,16 @@ class ClienteController {
             ).toJson();
 
             res.json(respuesta);
-        }        
+        }
     }
 
     async crearCliente(req, res) {
         let respuesta;
         try {
-
-            const clienteCreado = await this.#clienteService.crear(req.logger, req.body);
+            const clienteCreado = await this.#clienteService.crear(
+                req.logger,
+                req.body
+            );
             respuesta = new RespuestaModelo(
                 'EXITO',
                 'Cliente creado correctamente',
@@ -75,7 +80,7 @@ class ClienteController {
 
             return res.json(respuesta);
         } catch (error) {
-            req.logger.error(JSON.stringify(error))
+            req.logger.error(JSON.stringify(error));
             respuesta = new RespuestaModelo(
                 'NO_EXITO',
                 'Error al crear el cliente.',
@@ -83,7 +88,7 @@ class ClienteController {
             ).toJson();
 
             res.json(respuesta);
-        }   
+        }
     }
 }
 
