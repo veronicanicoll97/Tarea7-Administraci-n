@@ -1,42 +1,50 @@
 generator client {
-  provider = "prisma-client-js"
+  provider        = "prisma-client-js"
+  previewFeatures = ["multiSchema"]
 }
 
 datasource db {
   provider = "postgresql"
   url      = env("DATABASE_URL")
+  schemas  = ["restaurante"]
 }
 
 model clientes {
-  idCliente    Int        @id(map: "clientes_pk") @default(autoincrement()) @map("id_cliente")
-  nroDocumento String     @map("cedula") @db.VarChar
-  nombres      String     @db.VarChar
-  apellidos    String     @db.VarChar
-  reservas     reservas[]
+  idCliente Int        @id(map: "clientes_pk") @default(autoincrement()) @map("id_cliente")
+  cedula     String     @unique(map: "cedula_uk") @db.VarChar
+  nombres    String     @db.VarChar
+  apellidos  String     @db.VarChar
+  reservas   reservas[]
+
+  @@schema("restaurante")
 }
 
 model mesas {
-  idMesa           Int          @id(map: "mesas_pk") @default(autoincrement()) @map("id_mesa")
-  nombreMesa       String       @map("nombre_mesa") @db.VarChar
-  posicionX        Float        @map("posicion_x") @db.Real
-  posicionY        Int          @map("posicion_y")
-  capacidadPorMesa Int          @map("capacidad_x_mesa")
-  estado           estado_mesa? @default(DISPONIBLE)
+  id_mesa          Int                         @id(map: "mesas_pk") @default(autoincrement())
+  nombre_mesa      String                      @db.VarChar
+  posicion_x       Float                       @db.Real
+  posicion_y       Int
+  capacidad_x_mesa Int
+  estado           Unsupported("estado_mesa")? @default(dbgenerated("'DISPONIBLE'::estado_mesa"))
   reservas         reservas[]
+
+  @@schema("restaurante")
 }
 
 model reservas {
-  idReserva         Int          @id(map: "reservas_pk") @default(autoincrement()) @map("id_reserva")
-  fechaReserva      DateTime     @map("fecha_reserva") @db.Date
-  horaInicioReserva DateTime     @map("hora_inicio_reserva") @db.Time(6)
-  horaFinReserva    DateTime     @map("hora_fin_reserva") @db.Time(6)
-  cantidadMesa      Int          @map("cantidad_mesa")
-  idRestaurante     Int          @map("id_restaurante")
-  idCliente         Int          @map("id_cliente")
-  idMesa            Int          @map("id_mesa")
-  clientes          clientes     @relation(fields: [idCliente], references: [idCliente], onDelete: NoAction, onUpdate: NoAction, map: "clientes_reservas_fk")
-  mesas             mesas        @relation(fields: [idMesa], references: [idMesa], onDelete: NoAction, onUpdate: NoAction, map: "mesas_reservas_fk")
-  restaurantes      restaurantes @relation(fields: [idRestaurante], references: [idRestaurante], onDelete: NoAction, onUpdate: NoAction, map: "restaurantes_reservas_fk")
+  id_reserva          Int          @id(map: "reservas_pk") @default(autoincrement())
+  fecha_reserva       DateTime     @db.Date
+  hora_inicio_reserva DateTime     @db.Time(6)
+  hora_fin_reserva    DateTime     @db.Time(6)
+  cantidad_mesa       Int
+  id_restaurante      Int
+  id_cliente          Int
+  id_mesa             Int
+  clientes            clientes     @relation(fields: [id_cliente], references: [idCliente], onDelete: NoAction, onUpdate: NoAction, map: "clientes_reservas_fk")
+  mesas               mesas        @relation(fields: [id_mesa], references: [id_mesa], onDelete: NoAction, onUpdate: NoAction, map: "mesas_reservas_fk")
+  restaurantes        restaurantes @relation(fields: [id_restaurante], references: [idRestaurante], onDelete: NoAction, onUpdate: NoAction, map: "restaurantes_reservas_fk")
+
+  @@schema("restaurante")
 }
 
 model restaurantes {
@@ -44,9 +52,6 @@ model restaurantes {
   nombre        String     @db.VarChar
   direccion     String     @db.VarChar
   reservas      reservas[]
-}
 
-enum estado_mesa {
-  DISPONIBLE
-  RESERVADO
+  @@schema("restaurante")
 }

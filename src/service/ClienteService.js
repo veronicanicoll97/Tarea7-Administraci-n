@@ -26,14 +26,14 @@ class ClienteService {
      * Cliente por identificador de BD.
      * @param {*} log Instancia de escitura de logs.
      * @param {Number} cliente.idCliente Identificador del
-     * cliente. 
-     * @returns 
+     * cliente.
+     * @returns
      */
     async clienteById(log, cliente) {
         try {
             log.info(
-                'Búsqueda de cliente segun argumentos: ' + 
-                JSON.stringify(cliente)
+                'Búsqueda de cliente segun argumentos: ' +
+                    JSON.stringify(cliente)
             );
             return await this.#clienteRepository.getCliente(log, cliente);
         } catch (error) {
@@ -46,14 +46,14 @@ class ClienteService {
      * Número de documento del cliente
      * @param {*} log Instancia de escitura de logs.
      * @param {String} cliente.nroDocumento INro de documento
-     * del cliente. 
-     * @returns 
+     * del cliente.
+     * @returns
      */
     async clienteByNroDocumento(log, cliente) {
         try {
             log.info(
-                'Búsqueda de cliente segun argumentos: ' + 
-                JSON.stringify(cliente)
+                'Búsqueda de cliente segun argumentos: ' +
+                    JSON.stringify(cliente)
             );
             return await this.#clienteRepository.getCliente(log, cliente);
         } catch (error) {
@@ -65,52 +65,51 @@ class ClienteService {
     /**
      * Creación de un cliente.
      * @param {*} log Instancia de escitura de logs.
-     * @param {String} cliente.nroDocumento Numero de 
+     * @param {String} cliente.nroDocumento Numero de
      * documento del cliente.
      * @param {String} cliente.nombres Nombre del cliente
      * @param {String} cliente.apellidos Apellido del cliente
-     * @returns 
+     * @returns
      */
     async crear(log, cliente) {
         try {
-
             log.info(
-                'Datos recibidos para la creación de un cliente: ' + 
-                JSON.stringify(cliente)
+                'Datos recibidos para la creación de un cliente: ' +
+                    JSON.stringify(cliente)
             );
-            const validarDatos = (data) => {
-                Object.entries(data).forEach(
-                    ([key, value]) => {
-                        if(key === 'nombres' && typeof value != 'string') 
-                            throw new ErrorHandler(
-                                'Error en el tipo de dato se esperaba string se mandó un ' + typeof value,
-                                { key },
-                                ''
-                            )
-                        if(key === 'apellidos' && typeof value != 'string') 
-                            throw new ErrorHandler(
-                                'Error en el tipo de dato se esperaba string se mandó un ' + typeof value,
-                                { key },
-                                ''
-                            )
-                        if(key === 'nroDocumento' && typeof value != 'string') 
-                            throw new ErrorHandler(
-                                'Error en el tipo de dato se esperaba string se mandó un ' + typeof value,
-                                { key },
-                                ''
-                            )
-                    }
-                )
-            }
+            const validarDatos = data => {
+                Object.entries(data).forEach(([key, value]) => {
+                    if (key === 'nombres' && typeof value != 'string')
+                        throw new ErrorHandler(
+                            'Error en el tipo de dato se esperaba string se mandó un ' +
+                                typeof value,
+                            { key },
+                            ''
+                        );
+                    if (key === 'apellidos' && typeof value != 'string')
+                        throw new ErrorHandler(
+                            'Error en el tipo de dato se esperaba string se mandó un ' +
+                                typeof value,
+                            { key },
+                            ''
+                        );
+                    if (key === 'nroDocumento' && typeof value != 'string')
+                        throw new ErrorHandler(
+                            'Error en el tipo de dato se esperaba string se mandó un ' +
+                                typeof value,
+                            { key },
+                            ''
+                        );
+                });
+            };
 
-            log.info('Validación de los datos para la creación de un cliente.')
-            validarDatos(cliente)
+            log.info('Validación de los datos para la creación de un cliente.');
+            validarDatos(cliente);
 
             return await this.#clienteRepository.crearCliente(log, cliente);
-
-        }catch(error) {
+        } catch (error) {
             log.error(JSON.stringify(error));
-            throw error;            
+            throw error;
         }
     }
 }

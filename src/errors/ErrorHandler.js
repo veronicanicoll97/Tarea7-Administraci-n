@@ -1,6 +1,6 @@
 class ErrorHandler extends Error {
     constructor(mensaje, detalle, extensiones) {
-        super()
+        super();
         this.mensaje = mensaje;
         this.detalle = detalle;
         this.extensiones = extensiones;
