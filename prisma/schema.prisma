@@ -35,7 +35,7 @@ model mesas {
 }
 
 model reservas {
-  id_reserva        Int      @id(map: "reservas_pk") @default(autoincrement())
+  idReserva         Int      @id(map: "reservas_pk") @default(autoincrement()) @map("id_reserva")
   fechaReserva      DateTime @map("fecha_reserva") @db.Date
   horaInicioReserva DateTime @map("hora_inicio_reserva") @db.Time(6)
   horaFinReserva    DateTime @map("hora_fin_reserva") @db.Time(6)

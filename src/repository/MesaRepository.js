@@ -47,10 +47,11 @@ class MesaRepository {
     async mesaById(log, idMesa) {
         try {
             log.info('Obtiene la mesa a partir de su identificador: ' + idMesa);
-            const mesa = await pgClient.mesas.finUnique({
+            const mesa = await pgClient.mesas.findUnique({
                 where: { idMesa },
             });
-
+            if(!mesa)
+                return new Object();
             return mesa;
         } catch (error) {
             log.error(error);

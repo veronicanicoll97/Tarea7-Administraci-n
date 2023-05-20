@@ -114,7 +114,7 @@ class RestauranteRepository {
             };
             const restauranteEliminado = await pgClient.restaurantes.delete({
                 where: {
-                    ...params,
+                    ...params
                 },
             });
 

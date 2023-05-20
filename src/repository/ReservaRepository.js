@@ -17,17 +17,15 @@ class ReservaRepository {
                     mesas: {
                         select: {
                             idRestaurante: true,
-                            restaurantes: {
-                                nombre: true,
-                                direccion: true,
-                            },
+                            restaurantes: true,
+                            nroPiso: true,
+                            estadoMesa: true,
+                            capacidadPorMesa: true,
+                            posicionX: true, 
+                            posicionY: true
                         },
                     },
-                    clientes: {
-                        cedula: true,
-                        nombres: true,
-                        apellidos: true,
-                    },
+                    clientes: true
                 },
             });
             return reservas;
@@ -80,17 +78,15 @@ class ReservaRepository {
                     mesas: {
                         select: {
                             idRestaurante: true,
-                            restaurantes: {
-                                nombre: true,
-                                direccion: true,
-                            },
+                            restaurantes: true,
+                            nroPiso: true,
+                            estadoMesa: true,
+                            capacidadPorMesa: true,
+                            posicionX: true, 
+                            posicionY: true
                         },
                     },
-                    clientes: {
-                        cedula: true,
-                        nombres: true,
-                        apellidos: true,
-                    },
+                    clientes: true
                 },
             });
             return reservaEncontrada;

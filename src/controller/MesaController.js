@@ -92,8 +92,8 @@ class MesaController {
     async actualizarMesa(req, res) {
         let respuesta;
         try {
-            const idMesa = req.body.mesa.idMesa;
-            const data = req.body.mesa.data;
+            const idMesa = req.body.idMesa;
+            const data = req.body.mesa;
             const actualizarMesa = await this.#mesaController.actualizar(
                 req.logger,
                 data,
