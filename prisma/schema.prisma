@@ -25,9 +25,9 @@ model mesas {
   posicionX        Float        @map("posicion_x") @db.Real
   posicionY        Int          @map("posicion_y")
   capacidadPorMesa Int          @map("capacidad_x_mesa")
-  estadoMesa       String       @default("DISPONIBLE") @map("estado_mesa") @db.VarChar
   idRestaurante    Int          @map("id_restaurante")
   nroPiso          Int          @default(1) @map("nro_piso")
+  estadoMesa       estado_mesa? @default(DISPONIBLE) @map("estado")
   restaurantes     restaurantes @relation(fields: [idRestaurante], references: [idRestaurante], onDelete: NoAction, onUpdate: NoAction, map: "restaurantes_mesas_fk")
   reservas         reservas[]
 
@@ -53,6 +53,13 @@ model restaurantes {
   nombre        String  @db.VarChar
   direccion     String  @db.VarChar
   mesas         mesas[]
+
+  @@schema("restaurante")
+}
+
+enum estado_mesa {
+  DISPONIBLE
+  RESERVADO
 
   @@schema("restaurante")
 }
