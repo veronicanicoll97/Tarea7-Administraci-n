@@ -101,6 +101,29 @@ class ReservaRepository {
             });
         }
     }
+
+
+    async reservaByFecha(log, reserva) {
+        try {
+            log.info(
+                'Busqueda a partir de los datos: ' + 
+                JSON.stringify(reserva)
+            )
+            const [existe] = await pgClient.$queryRaw`
+                SELECT count(1) "cantidad"
+                FROM restaurante.reservas 
+                WHERE id_mesa = ${Number(reserva.idMesa)}
+                AND fecha_reserva = ${reserva.fechaReserva}::date
+                AND to_char(hora_fin_reserva, 'HH24:mm:ss') = ${reserva.horaFinReserva}
+                AND to_char(hora_inicio_reserva, 'HH24:mm:ss') = ${reserva.horaInicioReserva}
+            `
+
+            return Number(existe.cantidad)
+        } catch (error) {
+            log.error(error)
+            throw error;
+        }
+    }
 }
 
 module.exports = ReservaRepository;

@@ -1,3 +1,4 @@
+const { ErrorHandler } = require('../errors');
 const { ReservaRepository, MesaRepository } = require('../repository');
 const dayjs = require('dayjs');
 class ReservaService {
@@ -45,7 +46,7 @@ class ReservaService {
                     { key },
                     ''
                 );
-            if (key === 'idMesa' && typeof value != 'string')
+            if (key === 'idRestaurante' && typeof value != 'string')
                 throw new ErrorHandler(
                     'Error en el tipo de dato se esperaba string se mandó un ' +
                         typeof value,
@@ -70,33 +71,17 @@ class ReservaService {
             log.info('Retorna los datos de la reserva creada.');
             const { 
                 fechaReserva, horaInicioReserva, horaFinReserva,
-                cantidadMesa, idCliente, idMesa
+                cantidadMesa, idCliente, idRestaurante
             } = data
 
-            if(!idMesa){
-                log.error("No se ha enviado el dato de la mesa.")
-                throw new Error("No se ha enviado el dato de la mesa.")
-            }
+            const mesasResto = await this.#mesaRepository.mesaByIdRestaurante(
+                log, Number(idRestaurante)
+            );
+
             if(!idCliente){
                 log.error("No se ha enviado el dato del cliente.")
                 throw new Error("No se ha enviado el dato del cliente.")
             }
-
-            const mesaEncontrada = await this.#mesaRepository.mesaById(
-                log,
-                Number(idMesa)
-            )
-
-            if(mesaEncontrada.estadoMesa === 'RESERVADO') {
-                log.error("La mesa ya se encuentra reservada.")
-                throw new Error("La mesa ya se encuentra reservada.")
-            }
-            
-            await this.#mesaRepository.actualizarMesa(
-                log,
-                {"estadoMesa": "RESERVADO"},
-                Number(idMesa)
-            )
 
             const hora = time => {
                 const [hours, minutes, seconds] = time.split(":");
@@ -107,13 +92,34 @@ class ReservaService {
 
                 return dateObject;
             }
+            // Obtiene el último elemento disponible
+            const mesa = mesasResto.pop();
+            
+            const existeReserva = await this.#reservaRepository.reservaByFecha(
+                log,
+                { 
+                    idMesa: Number(mesa.idMesa),
+                    horaInicioReserva: horaInicioReserva,
+                    horaFinReserva: horaFinReserva,
+                    fechaReserva: fechaReserva
+                }
+            );
+
+
+            if(existeReserva > 0) {
+                log.error("No es posible reservar.")
+                throw new ErrorHandler({
+                    message: "La mesa ya se encuentra reservada en el horario seleccionado.",
+                    extensions: { fechaReserva, horaFinReserva, horaInicioReserva }
+                })
+            }
 
             const reserva = {
                 fechaReserva: new Date(fechaReserva),
                 horaInicioReserva: hora(horaInicioReserva),
                 horaFinReserva: hora(horaFinReserva),
                 cantidadMesa: !cantidadMesa ? undefined : Number(cantidadMesa),
-                idCliente: Number(idCliente), idMesa: Number(idMesa)
+                idCliente: Number(idCliente), idMesa: Number(mesa.idMesa)
             }
             return await this.#reservaRepository.crearReserva(log, reserva);
         } catch (error) {
