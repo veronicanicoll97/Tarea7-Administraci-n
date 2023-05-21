@@ -34,7 +34,9 @@ class MesaController {
     async getMesa(req, res) {
         let respuesta;
         try {
-            const { idMesa, idRestaurante } = req.body;
+            //const { idMesa, idRestaurante } = req.body;
+            const idMesa = req.query.idMesa;
+            const idRestaurante = req.query.idRestaurante;
             let params;
             if (!idMesa) {
                 params = { idRestaurante };

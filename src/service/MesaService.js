@@ -99,7 +99,7 @@ class MesaService {
 
     async crear(log, mesa) {
         try {
-            log.info('Validación de los datos para la creación de un cliente.');
+            log.info('Validación de los datos para la creación de una mesa.');
             this.validarDatos(mesa);
             const {
                 nombreMesa, posicionX, posicionY,

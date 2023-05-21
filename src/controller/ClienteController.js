@@ -34,7 +34,9 @@ class ClienteController {
     async getCliente(req, res) {
         let respuesta;
         try {
-            const { idCliente, nroDocumento } = req.body;
+            // const { idCliente, nroDocumento } = req.body;
+            const idCliente = req.query.idCliente;
+            const nroDocumento = req.query.nroDocumento;
             let params;
             if (!idCliente) {
                 params = { nroDocumento };
