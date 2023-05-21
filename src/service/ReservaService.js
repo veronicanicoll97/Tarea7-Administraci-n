@@ -93,8 +93,10 @@ class ReservaService {
 
                 return dateObject
             }
+
+            const randomIndex = Math.floor(Math.random()*mesasResto.length)
             // Obtiene el último elemento disponible
-            const mesa = mesasResto.pop();
+            const mesa = mesasResto[randomIndex];
             
             const existeReserva = await this.#reservaRepository.reservaByFecha(
                 log,
