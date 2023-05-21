@@ -5,6 +5,7 @@ const http = require('http');
 require('./database').database;
 const { log } = require('./log');
 const { apiRoutes } = require('./routes');
+const cors = require('cors');
 
 const app = express();
 
@@ -14,6 +15,7 @@ app.use(
         extended: true,
     })
 );
+app.use(cors({origin: true}));
 
 const puerto = process.env.PORT || 5000;
 const server = http.createServer(app);
