@@ -86,11 +86,12 @@ class ReservaService {
             const hora = time => {
                 const [hours, minutes, seconds] = time.split(":");
                 const dateObject = new Date();
-                dateObject.setHours(hours);
+                dateObject.setHours(hours)
+                dateObject.setHours(dateObject.getHours() - 4);
                 dateObject.setMinutes(minutes);
                 dateObject.setSeconds(seconds);
 
-                return dateObject;
+                return dateObject
             }
             // Obtiene el último elemento disponible
             const mesa = mesasResto.pop();
