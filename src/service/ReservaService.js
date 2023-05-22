@@ -81,12 +81,12 @@ class ReservaService {
             log.info('Retorna los datos de la reserva creada.');
             const { 
                 fechaReserva, horaInicioReserva, horaFinReserva,
-                cantidadMesa, idCliente, idRestaurante
+                cantidadMesa, idCliente, idMesa
             } = data
 
-            const mesasResto = await this.#mesaRepository.mesaByIdRestaurante(
+            /*const mesasResto = await this.#mesaRepository.mesaByIdRestaurante(
                 log, Number(idRestaurante)
-            );
+            );*/
 
             if(!idCliente){
                 log.error("No se ha enviado el dato del cliente.")
@@ -104,7 +104,7 @@ class ReservaService {
                 return dateObject
             }
 
-            const randomIndex = Math.floor(Math.random()*mesasResto.length)
+            /*const randomIndex = Math.floor(Math.random()*mesasResto.length)
             // Obtiene el último elemento disponible
             const mesa = mesasResto[randomIndex];
             
@@ -116,23 +116,24 @@ class ReservaService {
                     horaFinReserva: horaFinReserva,
                     fechaReserva: fechaReserva
                 }
-            );
+            );*/
 
 
-            if(existeReserva > 0) {
+            /*if(existeReserva > 0) {
                 log.error("No es posible reservar.")
                 throw new ErrorHandler({
                     message: "La mesa ya se encuentra reservada en el horario seleccionado.",
                     extensions: { fechaReserva, horaFinReserva, horaInicioReserva }
                 })
-            }
+            }*/
 
             const reserva = {
                 fechaReserva: new Date(fechaReserva),
                 horaInicioReserva: hora(horaInicioReserva),
                 horaFinReserva: hora(horaFinReserva),
                 cantidadMesa: !cantidadMesa ? undefined : Number(cantidadMesa),
-                idCliente: Number(idCliente), idMesa: Number(mesa.idMesa)
+                idCliente: Number(idCliente), 
+                idMesa: Number(idMesa)
             }
             return await this.#reservaRepository.crearReserva(log, reserva);
         } catch (error) {
