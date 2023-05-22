@@ -56,6 +56,16 @@ class ReservaService {
         });
     };
 
+    async listadoMesasDisponibles(log, params) {
+        try {
+            log.info('Retorna el listado de mesas disponibles para la reserva.');
+            return await this.#reservaRepository.listarMesasDisponibles(log, params);
+        } catch (error) {
+            log.error(JSON.stringify(error));
+            throw error;
+        }
+    }
+
     async listadoDeReserva(log) {
         try {
             log.info('Retorna el listado de reversas.');

@@ -80,6 +80,42 @@ class ReservaController {
             res.json(respuesta);
         }
     }
+    
+    async listarMesasDisponibles(req, res) {
+        let respuesta;
+        try {
+            const fechaReserva = req.query.fechaReserva;
+            const horaInicioReserva = req.query.horaInicioReserva;
+            const horaFinReserva = req.query.horaFinReserva;
+            const idRestaurante = req.query.idRestaurante;
+
+            const params = {
+                fechaReserva: fechaReserva,
+                horaInicioReserva: horaInicioReserva,
+                horaFinReserva: horaFinReserva,
+                idRestaurante: idRestaurante,
+            };
+            const listadoMesasDisponibles = await this.#reservaService.listadoMesasDisponibles(
+                req.logger,
+                params
+            );
+            respuesta = new RespuestaModelo(
+                'EXITO',
+                'Listado de mesas disponibles.',
+                listadoMesasDisponibles
+            ).toJson();
+
+            return res.json(respuesta);
+        } catch (error) {
+            respuesta = new RespuestaModelo(
+                'NO_EXITO',
+                'Error al obtener el listado de reservas.',
+                error
+            ).toJson();
+
+            res.json(respuesta);
+        }
+    }
 }
 
 module.exports = ReservaController;

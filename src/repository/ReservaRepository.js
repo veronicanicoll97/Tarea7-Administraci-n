@@ -124,6 +124,44 @@ class ReservaRepository {
             throw error;
         }
     }
+
+    async listarMesasDisponibles(log, params) {
+        try {
+            log.info(
+                'Busqueda a partir de los datos: ' + 
+                JSON.stringify(params)
+            );
+            const { 
+                fechaReserva, horaInicioReserva, horaFinReserva, idRestaurante
+            } = params;
+
+            return await pgClient.$queryRaw`
+                SELECT *
+                FROM restaurante.mesas m
+                WHERE m.id_restaurante = ${Number(idRestaurante)}
+                    AND m.id_mesa NOT IN (
+                    SELECT r.id_mesa
+                    FROM restaurante.reservas r
+                    JOIN restaurante.mesas m ON r.id_mesa = m.id_mesa
+                    WHERE id_restaurante = ${Number(idRestaurante)}
+                        AND fecha_reserva = ${fechaReserva}::date
+                        AND (
+                        (hora_inicio_reserva <= ${horaInicioReserva}::time AND hora_fin_reserva >= ${horaFinReserva}::time)
+                        OR
+                        (hora_inicio_reserva >= ${horaInicioReserva}::time AND hora_fin_reserva <= ${horaFinReserva}::time)
+                        OR
+                        (hora_inicio_reserva < ${horaInicioReserva}::time AND hora_fin_reserva > ${horaInicioReserva}::time AND hora_fin_reserva <= ${horaFinReserva}::time)
+                        OR
+                        (hora_fin_reserva > ${horaInicioReserva}::time AND hora_inicio_reserva >= ${horaInicioReserva}::time AND hora_inicio_reserva < ${horaFinReserva}::time)
+                        )
+                    )
+                ORDER BY id_mesa
+                `;
+        } catch (error) {
+            log.error(error)
+            throw error;
+        }
+    }
 }
 
 module.exports = ReservaRepository;
