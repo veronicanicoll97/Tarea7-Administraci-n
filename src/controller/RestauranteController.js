@@ -35,7 +35,9 @@ class RestauranteRepository {
     async getRestaurante(req, res) {
         let respuesta;
         try {
-            const { idRestaurante, nombre } = req.body;
+            // const { idRestaurante, nombre } = req.body;
+            const idRestaurante = Number(req.query.idRestaurante);
+            const nombre =  req.query.nombre;
             let params;
             if (!idRestaurante) {
                 params = { nombre };
