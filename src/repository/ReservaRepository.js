@@ -136,7 +136,15 @@ class ReservaRepository {
             } = params;
 
             return await pgClient.$queryRaw`
-                SELECT *
+                SELECT
+                m.id_mesa AS "idMesa",
+                m.nombre_mesa AS "nombreMesa",
+                m.posicion_x AS "posicionX",
+                m.posicion_y AS "posicionY",
+                m.capacidad_x_mesa AS "capacidadPorMesa",
+                m.id_restaurante AS "idRestaurante",
+                m.nro_piso AS "nroPiso",
+                m.estado AS "estadoMesa"
                 FROM restaurante.mesas m
                 WHERE m.id_restaurante = ${Number(idRestaurante)}
                     AND m.id_mesa NOT IN (
