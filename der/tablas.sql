@@ -65,22 +65,6 @@ CREATE TABLE restaurante.clientes (
 
 ALTER SEQUENCE restaurante.clientes_id_cliente_seq OWNED BY restaurante.clientes.id_cliente;
 
-CREATE SEQUENCE restaurante.reservas_id_reserva_seq;
-
-CREATE TABLE restaurante.reservas (
-                id_reserva INTEGER NOT NULL DEFAULT nextval('restaurante.reservas_id_reserva_seq'),
-                fecha_reserva DATE NOT NULL,
-                hora_inicio_reserva TIME NOT NULL,
-                hora_fin_reserva TIME NOT NULL,
-                cantidad_mesa INTEGER NOT NULL,
-                id_cliente INTEGER NOT NULL,
-                id_mesa INTEGER NOT NULL,
-                CONSTRAINT reservas_pk PRIMARY KEY (id_reserva)
-);
-
-
-ALTER SEQUENCE restaurante.reservas_id_reserva_seq OWNED BY restaurante.reservas.id_reserva;
-
 CREATE SEQUENCE restaurante.cabeceras_id_cabecera_seq;
 
 CREATE TABLE restaurante.cabeceras (
@@ -89,7 +73,8 @@ CREATE TABLE restaurante.cabeceras (
                 total NUMERIC DEFAULT 0 NOT NULL,
                 fecha_hora_inicio_consumo TIMESTAMP NOT NULL,
                 fecha_hora_fin_consumo TIMESTAMP NOT NULL,
-                id_reserva INTEGER NOT NULL,
+                id_mesa INTEGER NOT NULL,
+                id_cliente INTEGER NOT NULL,
                 CONSTRAINT cabeceras_pk PRIMARY KEY (id_cabecera)
 );
 
@@ -108,6 +93,22 @@ CREATE TABLE restaurante.detalles (
 
 
 ALTER SEQUENCE restaurante.detalles_id_detalle_seq OWNED BY restaurante.detalles.id_detalle;
+
+CREATE SEQUENCE restaurante.reservas_id_reserva_seq;
+
+CREATE TABLE restaurante.reservas (
+                id_reserva INTEGER NOT NULL DEFAULT nextval('restaurante.reservas_id_reserva_seq'),
+                fecha_reserva DATE NOT NULL,
+                hora_inicio_reserva TIME NOT NULL,
+                hora_fin_reserva TIME NOT NULL,
+                cantidad_mesa INTEGER NOT NULL,
+                id_cliente INTEGER NOT NULL,
+                id_mesa INTEGER NOT NULL,
+                CONSTRAINT reservas_pk PRIMARY KEY (id_reserva)
+);
+
+
+ALTER SEQUENCE restaurante.reservas_id_reserva_seq OWNED BY restaurante.reservas.id_reserva;
 
 ALTER TABLE restaurante.productos ADD CONSTRAINT categorias_productos_fk
 FOREIGN KEY (id_categoria)
@@ -137,6 +138,13 @@ ON DELETE NO ACTION
 ON UPDATE NO ACTION
 NOT DEFERRABLE;
 
+ALTER TABLE restaurante.cabeceras ADD CONSTRAINT mesas_cabeceras_fk
+FOREIGN KEY (id_mesa)
+REFERENCES restaurante.mesas (id_mesa)
+ON DELETE NO ACTION
+ON UPDATE NO ACTION
+NOT DEFERRABLE;
+
 ALTER TABLE restaurante.reservas ADD CONSTRAINT clientes_reservas_fk
 FOREIGN KEY (id_cliente)
 REFERENCES restaurante.clientes (id_cliente)
@@ -144,9 +152,9 @@ ON DELETE NO ACTION
 ON UPDATE NO ACTION
 NOT DEFERRABLE;
 
-ALTER TABLE restaurante.cabeceras ADD CONSTRAINT reservas_cabeceras_fk
-FOREIGN KEY (id_reserva)
-REFERENCES restaurante.reservas (id_reserva)
+ALTER TABLE restaurante.cabeceras ADD CONSTRAINT clientes_cabeceras_fk
+FOREIGN KEY (id_cliente)
+REFERENCES restaurante.clientes (id_cliente)
 ON DELETE NO ACTION
 ON UPDATE NO ACTION
 NOT DEFERRABLE;

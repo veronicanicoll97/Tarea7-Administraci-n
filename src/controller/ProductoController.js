@@ -61,7 +61,6 @@ class ProductoController {
 
             return res.json(respuesta);
         } catch (error) {
-            console.log(error)
             respuesta = new RespuestaModelo(
                 'NO_EXITO',
                 'Error al obtener el detalle de productos.',
@@ -118,7 +117,6 @@ class ProductoController {
             datos.precioVenta = Number(req.body.precioVenta);
             datos.idCategoria = Number(req.body.idCategoria);
 
-            console.log("Datos: ", datos);
             const insertarProducto = await this.#producto.crearProducto(
                 req.logger,
                 datos
@@ -140,7 +138,6 @@ class ProductoController {
 
             return res.json(respuesta);
         } catch (error) {
-            console.log(error)
             respuesta = new RespuestaModelo(
                 'NO_EXITO',
                 'Error al crear el producto.',

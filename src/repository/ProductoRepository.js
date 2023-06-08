@@ -118,7 +118,6 @@ class ProductoRepository {
 
             return productoActualizado;
         } catch (error) {
-            console.log(error);
             log.error(error);
             throw new ErrorHandler({
                 mensaje: 'Error al actualizar el producto.',
