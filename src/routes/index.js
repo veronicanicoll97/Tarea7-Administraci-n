@@ -3,7 +3,8 @@ const cliente = require('./cliente');
 const restaurante = require('./restaurante');
 const mesa = require('./mesa');
 const reserva = require('./reserva');
-const categoria = require('./categoria')
+const categoria = require('./categoria');
+const producto = require('./producto');
 
 const apiRoutes = app => {
     app.use(middlewareLog);
@@ -12,6 +13,7 @@ const apiRoutes = app => {
     app.use('/mesas', mesa);
     app.use('/reservas', reserva);
     app.use('/categorias', categoria);
+    app.use('/productos', producto);
 };
 
 exports.apiRoutes = apiRoutes;

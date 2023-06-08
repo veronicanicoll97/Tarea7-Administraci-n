@@ -19,7 +19,9 @@ class ClienteRepository {
         try {
             log.info('Argumentos para la consulta: ' + JSON.stringify(cliente));
             const params = {
-                idCliente: !cliente.idCliente ? undefined : Number(cliente.idCliente),
+                idCliente: !cliente.idCliente
+                    ? undefined
+                    : Number(cliente.idCliente),
                 nroDocumento: !cliente.nroDocumento
                     ? undefined
                     : cliente.nroDocumento,

@@ -10,9 +10,7 @@ class CategoriaController {
     async listar(req, res) {
         let respuesta;
         try {
-            const listado = await this.#categoria.listarCategorias(
-                req.logger
-            );
+            const listado = await this.#categoria.listarCategorias(req.logger);
             respuesta = new RespuestaModelo(
                 'EXITO',
                 'Listado de categorias.',
@@ -31,25 +29,25 @@ class CategoriaController {
         }
     }
 
-
     async categoriaPorId(req, res) {
         let respuesta;
         try {
-            const idCategoria = Number(req.query.idCategoria || req.params.idCategoria)
+            const idCategoria = Number(
+                req.query.idCategoria || req.params.idCategoria
+            );
 
-            const categoriaPorId = 
-                await this.#categoria.categoriaPorId(
-                    req.logger, idCategoria
-                );
+            const categoriaPorId = await this.#categoria.categoriaPorId(
+                req.logger,
+                idCategoria
+            );
 
-            if(Object.keys(categoriaPorId).length === 0) {
+            if (Object.keys(categoriaPorId).length === 0) {
                 respuesta = new RespuestaModelo(
                     'EXITO',
                     'Categoria inexistente.',
                     categoriaPorId
                 ).toJson();
-            }
-            else {
+            } else {
                 respuesta = new RespuestaModelo(
                     'EXITO',
                     'Categoria encontrada.',
@@ -69,27 +67,25 @@ class CategoriaController {
         }
     }
 
-
     async eliminarCategoria(req, res) {
         let respuesta;
         try {
             const idCategoria = Number(
                 req.body.idCategoria || req.params.idCategoria
-            )
+            );
 
-            const eliminarCategoria = 
-                await this.#categoria.eliminarCategoria(
-                    req.logger, idCategoria
-                );
+            const eliminarCategoria = await this.#categoria.eliminarCategoria(
+                req.logger,
+                idCategoria
+            );
 
-            if(Object.keys(eliminarCategoria).length === 0) {
+            if (Object.keys(eliminarCategoria).length === 0) {
                 respuesta = new RespuestaModelo(
                     'EXITO',
                     'Categoria inexistente para eliminar.',
                     eliminarCategoria
                 ).toJson();
-            }
-            else {
+            } else {
                 respuesta = new RespuestaModelo(
                     'EXITO',
                     'Categoria eliminada.',
@@ -112,23 +108,22 @@ class CategoriaController {
     async crearCategoria(req, res) {
         let respuesta;
         try {
-            const datos = req.body
+            const datos = req.body;
             datos.nombre = req.body.nombreCategoria.toUpperCase();
             delete datos.nombreCategoria;
 
-            const insertarCategoria = 
-                await this.#categoria.crearCategoria(
-                    req.logger, datos
-                );
+            const insertarCategoria = await this.#categoria.crearCategoria(
+                req.logger,
+                datos
+            );
 
-            if(Object.keys(insertarCategoria).length === 0) {
+            if (Object.keys(insertarCategoria).length === 0) {
                 respuesta = new RespuestaModelo(
                     'EXITO',
                     'Categoria no creada.',
                     insertarCategoria
                 ).toJson();
-            }
-            else {
+            } else {
                 respuesta = new RespuestaModelo(
                     'EXITO',
                     'Categoria creada exitosamente.',
@@ -148,27 +143,26 @@ class CategoriaController {
         }
     }
 
-
     async actualizarCategoria(req, res) {
         let respuesta;
         try {
-
             const idCategoria = Number(req.body.idCategoria);
-            const datos = { nombre: req.body.nombreCategoria.toUpperCase()}
+            const datos = { nombre: req.body.nombreCategoria.toUpperCase() };
 
-            const actualizarCategoria = 
+            const actualizarCategoria =
                 await this.#categoria.actualizarCategoria(
-                    req.logger, datos, idCategoria
+                    req.logger,
+                    datos,
+                    idCategoria
                 );
 
-            if(Object.keys(actualizarCategoria).length === 0) {
+            if (Object.keys(actualizarCategoria).length === 0) {
                 respuesta = new RespuestaModelo(
                     'EXITO',
                     'Categoria no actualizada.',
                     actualizarCategoria
                 ).toJson();
-            }
-            else {
+            } else {
                 respuesta = new RespuestaModelo(
                     'EXITO',
                     'Categoria creada exitosamente.',

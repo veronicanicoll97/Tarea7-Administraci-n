@@ -7,5 +7,7 @@ const router = express.Router();
 router.get('/', (req, res) => controller.listar(req, res));
 router.get('/reservaById', (req, res) => controller.getById(req, res));
 router.post('/crearReserva', (req, res) => controller.crear(req, res));
-router.get('/listarMesasDisponibles', (req, res) => controller.listarMesasDisponibles(req, res))
+router.get('/listarMesasDisponibles', (req, res) =>
+    controller.listarMesasDisponibles(req, res)
+);
 module.exports = router;
