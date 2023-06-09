@@ -37,15 +37,16 @@ model mesas {
 }
 
 model reservas {
-  idReserva         Int      @id(map: "reservas_pk") @default(autoincrement()) @map("id_reserva")
-  fechaReserva      DateTime @map("fecha_reserva") @db.Date
-  horaInicioReserva DateTime @map("hora_inicio_reserva") @db.Time(6)
-  horaFinReserva    DateTime @map("hora_fin_reserva") @db.Time(6)
-  cantidadMesa      Int      @map("cantidad_mesa")
-  idCliente         Int      @map("id_cliente")
-  idMesa            Int      @map("id_mesa")
-  clientes          clientes @relation(fields: [idCliente], references: [idCliente], onDelete: NoAction, onUpdate: NoAction, map: "clientes_reservas_fk")
-  mesas             mesas    @relation(fields: [idMesa], references: [idMesa], onDelete: NoAction, onUpdate: NoAction, map: "mesas_reservas_fk")
+  idReserva         Int             @id(map: "reservas_pk") @default(autoincrement()) @map("id_reserva")
+  fechaReserva      DateTime        @map("fecha_reserva") @db.Date
+  horaInicioReserva DateTime        @map("hora_inicio_reserva") @db.Timetz(6)
+  horaFinReserva    DateTime        @map("hora_fin_reserva") @db.Timetz(6)
+  cantidadMesa      Int             @map("cantidad_mesa")
+  idCliente         Int             @map("id_cliente")
+  idMesa            Int             @map("id_mesa")
+  estado            estado_reserva? @default(ACTIVO)
+  clientes          clientes        @relation(fields: [idCliente], references: [idCliente], onDelete: NoAction, onUpdate: NoAction, map: "clientes_reservas_fk")
+  mesas             mesas           @relation(fields: [idMesa], references: [idMesa], onDelete: NoAction, onUpdate: NoAction, map: "mesas_reservas_fk")
 
   @@schema("restaurante")
 }
@@ -62,8 +63,8 @@ model restaurantes {
 model cabeceras {
   idCabecera             Int              @id(map: "cabeceras_pk") @default(autoincrement()) @map("id_cabecera")
   total                  Decimal          @default(0) @db.Decimal
-  fechaHoraInicioConsumo DateTime         @map("fecha_hora_inicio_consumo") @db.Timestamp(6)
-  fechaHoraFinConsumo    DateTime         @map("fecha_hora_fin_consumo") @db.Timestamp(6)
+  fechaHoraInicioConsumo DateTime         @map("fecha_hora_inicio_consumo") @db.Timestamptz(6)
+  fechaHoraFinConsumo    DateTime         @map("fecha_hora_fin_consumo") @db.Timestamptz(6)
   idMesa                 Int              @map("id_mesa")
   idCliente              Int              @map("id_cliente")
   estado                 estado_cabecera? @default(ABIERTO)
@@ -114,6 +115,13 @@ enum estado_cabecera {
 enum estado_mesa {
   DISPONIBLE
   RESERVADO
+
+  @@schema("restaurante")
+}
+
+enum estado_reserva {
+  ACTIVO
+  FINALIZADO
 
   @@schema("restaurante")
 }

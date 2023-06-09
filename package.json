@@ -33,6 +33,7 @@
     "http": "^0.0.1-security",
     "joi": "^17.9.2",
     "nodemon": "^2.0.22",
+    "puppeteer": "^20.5.0",
     "stacktracey": "^2.1.8",
     "uuid": "^9.0.0",
     "winston": "^3.8.2",

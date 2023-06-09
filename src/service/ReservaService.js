@@ -93,10 +93,6 @@ class ReservaService {
                 idMesa,
             } = data;
 
-            /*const mesasResto = await this.#mesaRepository.mesaByIdRestaurante(
-                log, Number(idRestaurante)
-            );*/
-
             if (!idCliente) {
                 log.error('No se ha enviado el dato del cliente.');
                 throw new Error('No se ha enviado el dato del cliente.');
@@ -112,28 +108,6 @@ class ReservaService {
 
                 return dateObject;
             };
-
-            /*const randomIndex = Math.floor(Math.random()*mesasResto.length)
-            // Obtiene el último elemento disponible
-            const mesa = mesasResto[randomIndex];
-            
-            const existeReserva = await this.#reservaRepository.reservaByFecha(
-                log,
-                { 
-                    idMesa: Number(mesa.idMesa),
-                    horaInicioReserva: horaInicioReserva,
-                    horaFinReserva: horaFinReserva,
-                    fechaReserva: fechaReserva
-                }
-            );*/
-
-            /*if(existeReserva > 0) {
-                log.error("No es posible reservar.")
-                throw new ErrorHandler({
-                    message: "La mesa ya se encuentra reservada en el horario seleccionado.",
-                    extensions: { fechaReserva, horaFinReserva, horaInicioReserva }
-                })
-            }*/
 
             const reserva = {
                 fechaReserva: new Date(fechaReserva),

@@ -31,6 +31,21 @@ class ClienteRepository {
                 where: {
                     ...params,
                 },
+                select: {
+                    idCliente: true,
+                    nroDocumento: true,
+                    nombres: true,
+                    apellidos: true,
+                    cabeceras: {
+                        select: {
+                            idCabecera: true,
+                            estado: true
+                        },
+                        where: {
+                            estado: 'ABIERTO'
+                        }
+                    }
+                }
             });
 
             return clienteEnBD;

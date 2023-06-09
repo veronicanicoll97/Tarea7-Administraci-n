@@ -4,3 +4,4 @@ exports.MesaController = require('./MesaController');
 exports.ReservaController = require('./ReservaController');
 exports.CategoriaController = require('./CategoriaController');
 exports.ProductoController = require('./ProductoController');
+exports.ConsumoController = require('./ConsumoController');

@@ -166,6 +166,31 @@ class ReservaRepository {
             throw error;
         }
     }
+
+
+    async detalleReserva(log, datos) {
+        try {
+            log.info(
+                "Detalle de la reserva. " + 
+                JSON.stringify(datos)
+            );
+
+            const reserva = await pgClient.reservas.findMany({
+                where: { ... datos }
+            })
+
+            if(reserva.length === 0)    
+                return new Array();
+            return reserva
+        } catch (error) {
+            log.error(error)
+            throw new ErrorHandler({
+                mensaje: "Error al obtener el detalle de la reserva.",
+                detalle: {},
+                extensiones: { datos }
+            })
+        }
+    }
 }
 
 module.exports = ReservaRepository;

@@ -5,6 +5,7 @@ const mesa = require('./mesa');
 const reserva = require('./reserva');
 const categoria = require('./categoria');
 const producto = require('./producto');
+const consumo = require('./consumo');
 
 const apiRoutes = app => {
     app.use(middlewareLog);
@@ -14,6 +15,7 @@ const apiRoutes = app => {
     app.use('/reservas', reserva);
     app.use('/categorias', categoria);
     app.use('/productos', producto);
+    app.use('/consumos', consumo);
 };
 
 exports.apiRoutes = apiRoutes;
