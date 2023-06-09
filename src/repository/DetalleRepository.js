@@ -159,7 +159,7 @@ class DetalleRepository {
                     clientes: true,
                     detalles: {
                         select: {
-                            cantidad,
+                            cantidad: true,
                             productos: true
                         }
                     }

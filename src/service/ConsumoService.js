@@ -7,6 +7,7 @@ const {
 const dayjs = require("dayjs");
 const path = require('path');
 const fs = require("fs");
+const puppeteer = require('puppeteer');
 
 class ConsumoService {
     #mesa;
@@ -92,6 +93,8 @@ class ConsumoService {
             const consumo = await this.#detalle.detalleCabeceraById(
                 log, idCabecera
             );
+            console.log("consumo:");
+            console.log(consumo);
             
             const keys = ['PRODUCTO', 'CANTIDAD', 'PRECIO', 'TOTAL']
             const values = consumo.detalles.map(item => {
@@ -139,6 +142,7 @@ class ConsumoService {
                     </head>
                 </html>
             `
+
             const browser = await puppeteer.launch();
             const page = await browser.newPage();
             
