@@ -72,6 +72,12 @@ class DetalleRepository {
                 SET total = total + ${total}
                 WHERE id_cabecera = ${detalleInsertado.idCabecera}
             `
+            const idCabecera = detalleInsertado.idCabecera;
+            const cabecera = await pgClient.cabeceras.findUnique({
+                where: { idCabecera }
+            });
+            detalleInsertado['totalCabecera'] = cabecera.total;
+            console.log("detalleInsertado", detalleInsertado);
             return detalleInsertado
         } catch (error) {
             log.error(error);
