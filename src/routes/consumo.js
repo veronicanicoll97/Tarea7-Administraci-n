@@ -12,7 +12,7 @@ router.post('/insertarDetalle', (req, res) =>
 router.post('/verificarCabecera', (req, res) =>
     controller.verificarClienteCabecera(req, res)
 );
-router.put('/cerrarMesa', (req, res) =>
+router.get('/cerrarMesa/:idMesa', (req, res) =>
     controller.cerrarMesa(req, res)
 );
 

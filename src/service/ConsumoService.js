@@ -72,7 +72,7 @@ class ConsumoService {
 
             // Actualiza el estado de la cabecera.
             const actualizarCabecera = await this.#detalle.actualizarCabecera(
-                log, cabeceraDetalle.idCabecera, 'CERRADO'
+                log, cabeceraDetalle[0].idCabecera, 'CERRADO'
             )
 
             return actualizarCabecera

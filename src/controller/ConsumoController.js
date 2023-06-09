@@ -67,8 +67,8 @@ class ConsumoController {
         try {
 
             const detalle = await this.#consumo.cerrarMesa(
-                req.logger, req.body.idMesa
-            )
+                req.logger, Number(req.query.idMesa || req.params.idMesa)
+            );
             
             respuesta = new RespuestaModelo(
                 'EXITO',
