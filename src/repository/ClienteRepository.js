@@ -19,7 +19,9 @@ class ClienteRepository {
         try {
             log.info('Argumentos para la consulta: ' + JSON.stringify(cliente));
             const params = {
-                idCliente: !cliente.idCliente ? undefined : Number(cliente.idCliente),
+                idCliente: !cliente.idCliente
+                    ? undefined
+                    : Number(cliente.idCliente),
                 nroDocumento: !cliente.nroDocumento
                     ? undefined
                     : cliente.nroDocumento,
@@ -29,6 +31,21 @@ class ClienteRepository {
                 where: {
                     ...params,
                 },
+                select: {
+                    idCliente: true,
+                    nroDocumento: true,
+                    nombres: true,
+                    apellidos: true,
+                    cabeceras: {
+                        select: {
+                            idCabecera: true,
+                            estado: true
+                        },
+                        where: {
+                            estado: 'ABIERTO'
+                        }
+                    }
+                }
             });
 
             return clienteEnBD;

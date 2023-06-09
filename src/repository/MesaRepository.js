@@ -50,8 +50,7 @@ class MesaRepository {
             const mesa = await pgClient.mesas.findUnique({
                 where: { idMesa },
             });
-            if(!mesa)
-                return new Object();
+            if (!mesa) return new Object();
             return mesa;
         } catch (error) {
             log.error(error);

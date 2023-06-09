@@ -80,7 +80,7 @@ class ReservaController {
             res.json(respuesta);
         }
     }
-    
+
     async listarMesasDisponibles(req, res) {
         let respuesta;
         try {
@@ -95,10 +95,11 @@ class ReservaController {
                 horaFinReserva: horaFinReserva,
                 idRestaurante: idRestaurante,
             };
-            const listadoMesasDisponibles = await this.#reservaService.listadoMesasDisponibles(
-                req.logger,
-                params
-            );
+            const listadoMesasDisponibles =
+                await this.#reservaService.listadoMesasDisponibles(
+                    req.logger,
+                    params
+                );
             respuesta = new RespuestaModelo(
                 'EXITO',
                 'Listado de mesas disponibles.',

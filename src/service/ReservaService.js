@@ -3,10 +3,10 @@ const { ReservaRepository, MesaRepository } = require('../repository');
 const dayjs = require('dayjs');
 class ReservaService {
     #reservaRepository;
-    #mesaRepository
+    #mesaRepository;
     constructor() {
         this.#reservaRepository = new ReservaRepository();
-        this.#mesaRepository = new MesaRepository()
+        this.#mesaRepository = new MesaRepository();
     }
 
     validarDatos(data) {
@@ -54,12 +54,17 @@ class ReservaService {
                     ''
                 );
         });
-    };
+    }
 
     async listadoMesasDisponibles(log, params) {
         try {
-            log.info('Retorna el listado de mesas disponibles para la reserva.');
-            return await this.#reservaRepository.listarMesasDisponibles(log, params);
+            log.info(
+                'Retorna el listado de mesas disponibles para la reserva.'
+            );
+            return await this.#reservaRepository.listarMesasDisponibles(
+                log,
+                params
+            );
         } catch (error) {
             log.error(JSON.stringify(error));
             throw error;
@@ -79,62 +84,39 @@ class ReservaService {
     async crearReserva(log, data) {
         try {
             log.info('Retorna los datos de la reserva creada.');
-            const { 
-                fechaReserva, horaInicioReserva, horaFinReserva,
-                cantidadMesa, idCliente, idMesa
-            } = data
+            const {
+                fechaReserva,
+                horaInicioReserva,
+                horaFinReserva,
+                cantidadMesa,
+                idCliente,
+                idMesa,
+            } = data;
 
-            /*const mesasResto = await this.#mesaRepository.mesaByIdRestaurante(
-                log, Number(idRestaurante)
-            );*/
-
-            if(!idCliente){
-                log.error("No se ha enviado el dato del cliente.")
-                throw new Error("No se ha enviado el dato del cliente.")
+            if (!idCliente) {
+                log.error('No se ha enviado el dato del cliente.');
+                throw new Error('No se ha enviado el dato del cliente.');
             }
 
             const hora = time => {
-                const [hours, minutes, seconds] = time.split(":");
+                const [hours, minutes, seconds] = time.split(':');
                 const dateObject = new Date();
-                dateObject.setHours(hours)
+                dateObject.setHours(hours);
                 dateObject.setHours(dateObject.getHours() - 4);
                 dateObject.setMinutes(minutes);
                 dateObject.setSeconds(seconds);
 
-                return dateObject
-            }
-
-            /*const randomIndex = Math.floor(Math.random()*mesasResto.length)
-            // Obtiene el último elemento disponible
-            const mesa = mesasResto[randomIndex];
-            
-            const existeReserva = await this.#reservaRepository.reservaByFecha(
-                log,
-                { 
-                    idMesa: Number(mesa.idMesa),
-                    horaInicioReserva: horaInicioReserva,
-                    horaFinReserva: horaFinReserva,
-                    fechaReserva: fechaReserva
-                }
-            );*/
-
-
-            /*if(existeReserva > 0) {
-                log.error("No es posible reservar.")
-                throw new ErrorHandler({
-                    message: "La mesa ya se encuentra reservada en el horario seleccionado.",
-                    extensions: { fechaReserva, horaFinReserva, horaInicioReserva }
-                })
-            }*/
+                return dateObject;
+            };
 
             const reserva = {
                 fechaReserva: new Date(fechaReserva),
                 horaInicioReserva: hora(horaInicioReserva),
                 horaFinReserva: hora(horaFinReserva),
                 cantidadMesa: !cantidadMesa ? undefined : Number(cantidadMesa),
-                idCliente: Number(idCliente), 
-                idMesa: Number(idMesa)
-            }
+                idCliente: Number(idCliente),
+                idMesa: Number(idMesa),
+            };
             return await this.#reservaRepository.crearReserva(log, reserva);
         } catch (error) {
             log.error(JSON.stringify(error));

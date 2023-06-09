@@ -21,11 +21,11 @@ class ReservaRepository {
                             nroPiso: true,
                             estadoMesa: true,
                             capacidadPorMesa: true,
-                            posicionX: true, 
-                            posicionY: true
+                            posicionX: true,
+                            posicionY: true,
                         },
                     },
-                    clientes: true
+                    clientes: true,
                 },
             });
             return reservas;
@@ -82,11 +82,11 @@ class ReservaRepository {
                             nroPiso: true,
                             estadoMesa: true,
                             capacidadPorMesa: true,
-                            posicionX: true, 
-                            posicionY: true
+                            posicionX: true,
+                            posicionY: true,
                         },
                     },
-                    clientes: true
+                    clientes: true,
                 },
             });
             return reservaEncontrada;
@@ -102,25 +102,27 @@ class ReservaRepository {
         }
     }
 
-
     async reservaByFecha(log, reserva) {
         try {
             log.info(
-                'Busqueda a partir de los datos: ' + 
-                JSON.stringify(reserva)
-            )
+                'Busqueda a partir de los datos: ' + JSON.stringify(reserva)
+            );
             const [existe] = await pgClient.$queryRaw`
                 SELECT count(1) "cantidad"
                 FROM restaurante.reservas 
                 WHERE id_mesa = ${Number(reserva.idMesa)}
                 AND fecha_reserva = ${reserva.fechaReserva}::date
-                AND to_char(hora_fin_reserva, 'HH24:mm:ss') = ${reserva.horaFinReserva}
-                AND to_char(hora_inicio_reserva, 'HH24:mm:ss') = ${reserva.horaInicioReserva}
-            `
+                AND to_char(hora_fin_reserva, 'HH24:mm:ss') = ${
+                    reserva.horaFinReserva
+                }
+                AND to_char(hora_inicio_reserva, 'HH24:mm:ss') = ${
+                    reserva.horaInicioReserva
+                }
+            `;
 
-            return Number(existe.cantidad)
+            return Number(existe.cantidad);
         } catch (error) {
-            log.error(error)
+            log.error(error);
             throw error;
         }
     }
@@ -128,11 +130,13 @@ class ReservaRepository {
     async listarMesasDisponibles(log, params) {
         try {
             log.info(
-                'Busqueda a partir de los datos: ' + 
-                JSON.stringify(params)
+                'Busqueda a partir de los datos: ' + JSON.stringify(params)
             );
-            const { 
-                fechaReserva, horaInicioReserva, horaFinReserva, idRestaurante
+            const {
+                fechaReserva,
+                horaInicioReserva,
+                horaFinReserva,
+                idRestaurante,
             } = params;
 
             return await pgClient.$queryRaw`
@@ -166,8 +170,33 @@ class ReservaRepository {
                 ORDER BY id_mesa
                 `;
         } catch (error) {
-            log.error(error)
+            log.error(error);
             throw error;
+        }
+    }
+
+
+    async detalleReserva(log, datos) {
+        try {
+            log.info(
+                "Detalle de la reserva. " + 
+                JSON.stringify(datos)
+            );
+
+            const reserva = await pgClient.reservas.findMany({
+                where: { ... datos }
+            })
+
+            if(reserva.length === 0)    
+                return new Array();
+            return reserva
+        } catch (error) {
+            log.error(error)
+            throw new ErrorHandler({
+                mensaje: "Error al obtener el detalle de la reserva.",
+                detalle: {},
+                extensiones: { datos }
+            })
         }
     }
 }

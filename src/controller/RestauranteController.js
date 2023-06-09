@@ -37,7 +37,7 @@ class RestauranteRepository {
         try {
             // const { idRestaurante, nombre } = req.body;
             const idRestaurante = Number(req.query.idRestaurante);
-            const nombre =  req.query.nombre;
+            const nombre = req.query.nombre;
             let params;
             if (!idRestaurante) {
                 params = { nombre };

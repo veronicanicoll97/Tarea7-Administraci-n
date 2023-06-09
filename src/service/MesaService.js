@@ -58,7 +58,7 @@ class MesaService {
                     ''
                 );
         });
-    };
+    }
 
     async listadoDeMesas(log) {
         try {
@@ -102,21 +102,29 @@ class MesaService {
             log.info('Validación de los datos para la creación de una mesa.');
             this.validarDatos(mesa);
             const {
-                nombreMesa, posicionX, posicionY,
-                capacidadPorMesa, estadoMesa, idRestaurante,
-                nroPiso
+                nombreMesa,
+                posicionX,
+                posicionY,
+                capacidadPorMesa,
+                estadoMesa,
+                idRestaurante,
+                nroPiso,
             } = mesa;
 
-            if(!idRestaurante)
-                throw new Error('No se ha proporcionado el identificador del restaurante')
+            if (!idRestaurante)
+                throw new Error(
+                    'No se ha proporcionado el identificador del restaurante'
+                );
             const data = {
-                nombreMesa, posicionX: Number(posicionX),
-                posicionY: Number(posicionY), estadoMesa, 
+                nombreMesa,
+                posicionX: Number(posicionX),
+                posicionY: Number(posicionY),
+                estadoMesa,
                 capacidadPorMesa: Number(capacidadPorMesa),
                 idRestaurante: Number(idRestaurante),
-                nroPiso: Number(nroPiso)
-            }
-            
+                nroPiso: Number(nroPiso),
+            };
+
             log.info('Retorna los datos de la mesa creada.');
             return await this.#mesaRepository.crearMesa(log, data);
         } catch (error) {
@@ -128,22 +136,34 @@ class MesaService {
     async actualizar(log, mesa, idMesa) {
         try {
             const {
-                nombreMesa, posicionX, posicionY,
-                capacidadPorMesa, estadoMesa, idRestaurante,
-                nroPiso
+                nombreMesa,
+                posicionX,
+                posicionY,
+                capacidadPorMesa,
+                estadoMesa,
+                idRestaurante,
+                nroPiso,
             } = mesa;
 
             const data = {
-                nombreMesa: !nombreMesa ? undefined : nombreMesa, 
+                nombreMesa: !nombreMesa ? undefined : nombreMesa,
                 posicionX: !posicionX ? undefined : Number(posicionX),
-                posicionY: !posicionY ? undefined : Number(posicionY), 
-                estadoMesa: !estadoMesa ? undefined : estadoMesa, 
-                capacidadPorMesa: !capacidadPorMesa ? undefined : Number(capacidadPorMesa),
-                idRestaurante: !idRestaurante ? undefined : Number(idRestaurante),
-                nroPiso: !nroPiso ? undefined : Number(nroPiso)
-            }
+                posicionY: !posicionY ? undefined : Number(posicionY),
+                estadoMesa: !estadoMesa ? undefined : estadoMesa,
+                capacidadPorMesa: !capacidadPorMesa
+                    ? undefined
+                    : Number(capacidadPorMesa),
+                idRestaurante: !idRestaurante
+                    ? undefined
+                    : Number(idRestaurante),
+                nroPiso: !nroPiso ? undefined : Number(nroPiso),
+            };
             log.info('Se retornan los datos de la mesa actualizada.');
-            return await this.#mesaRepository.actualizarMesa(log, data, Number(idMesa));
+            return await this.#mesaRepository.actualizarMesa(
+                log,
+                data,
+                Number(idMesa)
+            );
         } catch (error) {
             log.error(JSON.stringify(error));
             throw error;

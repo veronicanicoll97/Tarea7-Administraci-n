@@ -10,10 +10,11 @@ datasource db {
 }
 
 model clientes {
-  idCliente    Int        @id(map: "clientes_pk") @default(autoincrement()) @map("id_cliente")
-  nroDocumento String     @unique(map: "cedula_uk") @map("cedula") @db.VarChar
-  nombres      String     @db.VarChar
-  apellidos    String     @db.VarChar
+  idCliente    Int         @id(map: "clientes_pk") @default(autoincrement()) @map("id_cliente")
+  nroDocumento String      @unique(map: "cedula_uk") @map("cedula") @db.VarChar
+  nombres      String      @db.VarChar
+  apellidos    String      @db.VarChar
+  cabeceras    cabeceras[]
   reservas     reservas[]
 
   @@schema("restaurante")
@@ -28,6 +29,7 @@ model mesas {
   idRestaurante    Int          @map("id_restaurante")
   nroPiso          Int          @default(1) @map("nro_piso")
   estadoMesa       estado_mesa? @default(DISPONIBLE) @map("estado")
+  cabeceras        cabeceras[]
   restaurantes     restaurantes @relation(fields: [idRestaurante], references: [idRestaurante], onDelete: NoAction, onUpdate: NoAction, map: "restaurantes_mesas_fk")
   reservas         reservas[]
 
@@ -35,15 +37,16 @@ model mesas {
 }
 
 model reservas {
-  idReserva         Int      @id(map: "reservas_pk") @default(autoincrement()) @map("id_reserva")
-  fechaReserva      DateTime @map("fecha_reserva") @db.Date
-  horaInicioReserva DateTime @map("hora_inicio_reserva") @db.Time(6)
-  horaFinReserva    DateTime @map("hora_fin_reserva") @db.Time(6)
-  cantidadMesa      Int      @map("cantidad_mesa")
-  idCliente         Int      @map("id_cliente")
-  idMesa            Int      @map("id_mesa")
-  clientes          clientes @relation(fields: [idCliente], references: [idCliente], onDelete: NoAction, onUpdate: NoAction, map: "clientes_reservas_fk")
-  mesas             mesas    @relation(fields: [idMesa], references: [idMesa], onDelete: NoAction, onUpdate: NoAction, map: "mesas_reservas_fk")
+  idReserva         Int             @id(map: "reservas_pk") @default(autoincrement()) @map("id_reserva")
+  fechaReserva      DateTime        @map("fecha_reserva") @db.Date
+  horaInicioReserva DateTime        @map("hora_inicio_reserva") @db.Timetz(6)
+  horaFinReserva    DateTime        @map("hora_fin_reserva") @db.Timetz(6)
+  cantidadMesa      Int             @map("cantidad_mesa")
+  idCliente         Int             @map("id_cliente")
+  idMesa            Int             @map("id_mesa")
+  estado            estado_reserva? @default(ACTIVO)
+  clientes          clientes        @relation(fields: [idCliente], references: [idCliente], onDelete: NoAction, onUpdate: NoAction, map: "clientes_reservas_fk")
+  mesas             mesas           @relation(fields: [idMesa], references: [idMesa], onDelete: NoAction, onUpdate: NoAction, map: "mesas_reservas_fk")
 
   @@schema("restaurante")
 }
@@ -57,9 +60,68 @@ model restaurantes {
   @@schema("restaurante")
 }
 
+model cabeceras {
+  idCabecera             Int              @id(map: "cabeceras_pk") @default(autoincrement()) @map("id_cabecera")
+  total                  Decimal          @default(0) @db.Decimal
+  fechaHoraInicioConsumo DateTime         @map("fecha_hora_inicio_consumo") @db.Timestamptz(6)
+  fechaHoraFinConsumo    DateTime         @map("fecha_hora_fin_consumo") @db.Timestamptz(6)
+  idMesa                 Int              @map("id_mesa")
+  idCliente              Int              @map("id_cliente")
+  estado                 estado_cabecera? @default(ABIERTO)
+  clientes               clientes         @relation(fields: [idCliente], references: [idCliente], onDelete: NoAction, onUpdate: NoAction, map: "clientes_cabeceras_fk")
+  mesas                  mesas            @relation(fields: [idMesa], references: [idMesa], onDelete: NoAction, onUpdate: NoAction, map: "mesas_cabeceras_fk")
+  detalles               detalles[]
+
+  @@schema("restaurante")
+}
+
+model categorias {
+  idCategoria Int         @id(map: "categorias_pk") @default(autoincrement()) @map("id_categoria")
+  nombre      String      @db.VarChar
+  productos   productos[]
+
+  @@schema("restaurante")
+}
+
+model detalles {
+  idDetalle  Int       @id(map: "detalles_pk") @default(autoincrement()) @map("id_detalle")
+  idProducto Int       @map("id_producto")
+  cantidad   Int
+  idCabecera Int       @map("id_cabecera")
+  cabeceras  cabeceras @relation(fields: [idCabecera], references: [idCabecera], onDelete: NoAction, onUpdate: NoAction, map: "cabeceras_detalles_fk")
+  productos  productos @relation(fields: [idProducto], references: [idProducto], onDelete: NoAction, onUpdate: NoAction, map: "productos_detalles_fk")
+
+  @@schema("restaurante")
+}
+
+model productos {
+  idProducto     Int        @id(map: "productos_pk") @default(autoincrement()) @map("id_producto")
+  nombreProducto String     @map("nombre_producto") @db.VarChar
+  precioVenta    Decimal    @map("precio_venta") @db.Decimal
+  idCategoria    Int        @map("id_categoria")
+  detalles       detalles[]
+  categorias     categorias @relation(fields: [idCategoria], references: [idCategoria], onDelete: NoAction, onUpdate: NoAction, map: "categorias_productos_fk")
+
+  @@schema("restaurante")
+}
+
+enum estado_cabecera {
+  ABIERTO
+  CERRADO
+
+  @@schema("restaurante")
+}
+
 enum estado_mesa {
   DISPONIBLE
   RESERVADO
+
+  @@schema("restaurante")
+}
+
+enum estado_reserva {
+  ACTIVO
+  FINALIZADO
 
   @@schema("restaurante")
 }
