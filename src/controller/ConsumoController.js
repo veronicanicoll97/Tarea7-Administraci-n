@@ -78,6 +78,7 @@ class ConsumoController {
 
             return res.json(respuesta);
         } catch (error) {
+            console.log(error);
             respuesta = new RespuestaModelo(
                 'NO_EXITO',
                 'Error al cerrar la mesa.',
@@ -135,6 +136,7 @@ class ConsumoController {
 
             return res.json(respuesta);
         } catch (error) {
+            console.log(error)
             respuesta = new RespuestaModelo(
                 'NO_EXITO',
                 'Error al verificar los datos.',

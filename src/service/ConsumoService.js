@@ -71,9 +71,10 @@ class ConsumoService {
                 log, Number(idMesa), 'ABIERTO'
             )
 
+            console.log(cabeceraDetalle)
             // Actualiza el estado de la cabecera.
             const actualizarCabecera = await this.#detalle.actualizarCabecera(
-                log, cabeceraDetalle[0].idCabecera, 'CERRADO'
+                log, cabeceraDetalle.idCabecera, 'CERRADO'
             )
 
             return actualizarCabecera
@@ -223,7 +224,7 @@ class ConsumoService {
 
 
         } catch (error) {
-            
+            console.log(error)
         }
     }
 }

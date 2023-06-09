@@ -80,6 +80,7 @@ class DetalleRepository {
             console.log("detalleInsertado", detalleInsertado);
             return detalleInsertado
         } catch (error) {
+            console.log(error)
             log.error(error);
             throw new ErrorHandler({
                 mensaje: "Error al insertar el detalle."
@@ -95,7 +96,7 @@ class DetalleRepository {
                 "Detalle de la cabecera asociada a la mesa: " + 
                 JSON.stringify({idMesa, estado})
             )
-            const detalleCabecera = await pgClient.cabeceras.findMany({
+            const [detalleCabecera] = await pgClient.cabeceras.findMany({
                 where: {
                     idMesa, estado
                 },
@@ -197,7 +198,7 @@ class DetalleRepository {
                     clientes: true,
                     detalles: {
                         select: {
-                            cantidad,
+                            cantidad: true,
                             productos: true
                         }
                     }

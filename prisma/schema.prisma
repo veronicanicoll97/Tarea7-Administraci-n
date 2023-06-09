@@ -63,8 +63,8 @@ model restaurantes {
 model cabeceras {
   idCabecera             Int              @id(map: "cabeceras_pk") @default(autoincrement()) @map("id_cabecera")
   total                  Decimal          @default(0) @db.Decimal
-  fechaHoraInicioConsumo DateTime         @map("fecha_hora_inicio_consumo") @db.Timestamptz(6)
-  fechaHoraFinConsumo    DateTime         @map("fecha_hora_fin_consumo") @db.Timestamptz(6)
+  fechaHoraInicioConsumo DateTime         @default(now()) @map("fecha_hora_inicio_consumo") @db.Timestamptz(6)
+  fechaHoraFinConsumo    DateTime?        @map("fecha_hora_fin_consumo") @db.Timestamptz(6)
   idMesa                 Int              @map("id_mesa")
   idCliente              Int              @map("id_cliente")
   estado                 estado_cabecera? @default(ABIERTO)
