@@ -167,6 +167,61 @@ class ConsumoService {
             throw error;  
         }
     }
+
+
+    async verificarClienteCabecera(log, nroDocumento, cliente, cabecera) {
+        try {
+            log.info(
+                "Verifica si existe el cliente y si existe cabecera para el cliente"
+            )
+            
+            if(nroDocumento) {
+                const existeCliente = 
+                    await this.#cliente.getCliente(log, { nroDocumento });
+
+                if(existeCliente) {
+                    log.info("Verifica existencia de la cabecera.");
+                    const existeCabecera = await this.#detalle.detalleCabeceraByIdCliente(
+                        log, existeCliente.idCliente, 'ABIERTO'
+                    );
+
+                    if(existeCabecera) {
+                        // retorna los datos del cliente y su cabecera.
+                        const clienteEncontrado = 
+                            await this.#cliente.getCliente(existeCliente.idCliente)
+
+                        return { idCabecera: clienteEncontrado.cabeceras.idCabecera }
+                    }
+                    else {
+                        // retorna la cabecera del cliente.
+                        cabecera.idCliente = existeCliente.idCliente
+                        const insertado = this.#detalle.insertarCabecera(
+                            log, cabecera
+                        )
+
+                        return { idCabecera: insertado.idCabecera }
+                    }
+                }
+                else {
+                    const clienteCreado = await this.#cliente.crearCliente(
+                        log, cliente
+                    );
+                    cabecera.idCliente = clienteCreado.idCliente
+                    const cabeceraCreada = await this.#detalle.insertarCabecera(
+                        log, cabecera
+                    );
+
+                    return { idCabecera: cabeceraCreada.idCabecera }
+                }
+            }
+
+            return new Object();
+
+
+        } catch (error) {
+            
+        }
+    }
 }
 
 
