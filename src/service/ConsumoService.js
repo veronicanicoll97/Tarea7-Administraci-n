@@ -14,7 +14,6 @@ class ConsumoService {
     #cliente;
     constructor() {
         this.#mesa = new MesaRepository();
-        this.#reserva = new ReservaRepository();
         this.#detalle = new DetalleRepository();
         this.#cliente = new ClienteRepository();
     }
