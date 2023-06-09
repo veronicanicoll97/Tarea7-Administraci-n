@@ -9,6 +9,9 @@ router.get('/getStringBase64/:idCabecera', (req, res) => controller.getStringBas
 router.post('/insertarDetalle', (req, res) =>
     controller.insertarDetalle(req, res)
 );
+router.post('/verificarCabecera', (req, res) =>
+    controller.verificarClienteCabecera(req, res)
+);
 router.put('/cerrarMesa', (req, res) =>
     controller.cerrarMesa(req, res)
 );

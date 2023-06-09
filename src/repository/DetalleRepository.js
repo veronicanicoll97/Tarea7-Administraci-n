@@ -169,6 +169,60 @@ class DetalleRepository {
             }).toJson()
         }
     }
+
+    async detalleCabeceraByIdCliente(log, idCliente, estado) {
+        try {
+            
+            log.info(
+                "Detalle de la cabecera asociada a la mesa: " + 
+                JSON.stringify({idCliente})
+            )
+            const [detalleCabecera] = await pgClient.cabeceras.findMany({
+                where: {
+                    idCliente,
+                    estado
+                },
+                select: {
+                    idCabecera: true,
+                    total: true,
+                    fechaHoraInicioConsumo: true,
+                    fechaHoraFinConsumo: true,
+                    estado: true,
+                    clientes: true,
+                    detalles: {
+                        select: {
+                            cantidad,
+                            productos: true
+                        }
+                    }
+                }
+            })
+
+            return detalleCabecera;
+
+        } catch (error) {
+            log.error(error)
+            throw new ErrorHandler({
+                mensaje: "Error al obtener el detalle asociado a  la cabecera."
+            }).toJson()
+        }
+    }
+
+
+    async insertarCabecera(log, cabecera) {
+        try {
+            log.info("Inserta una cabecera: " + JSON.stringify(cabecera))
+
+            return await pgClient.cabeceras.create({
+                data: { ... cabecera }
+            })
+        } catch (error) {
+            log.error(error)
+            throw new ErrorHandler({
+                mensaje: "Error al insertar la cabecera."
+            }).toJson()            
+        }
+    }
 }
 
 

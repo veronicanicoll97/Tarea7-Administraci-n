@@ -115,6 +115,35 @@ class ConsumoController {
             res.json(respuesta);
         }
     }
+
+
+    async verificarClienteCabecera(req, res) {
+        let respuesta;
+        try {
+
+            const body = req.body;
+            const datos = await this.#consumo.verificarClienteCabecera(
+                req.logger, body.nroDocumento, 
+                body.cliente, body.cabecera    
+            )
+            
+            respuesta = new RespuestaModelo(
+                'EXITO',
+                'Datos verificados.',
+                datos
+            ).toJson();
+
+            return res.json(respuesta);
+        } catch (error) {
+            respuesta = new RespuestaModelo(
+                'NO_EXITO',
+                'Error al verificar los datos.',
+                error
+            ).toJson();
+
+            res.json(respuesta);
+        }
+    }
 }
 
 
